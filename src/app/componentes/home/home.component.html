@@ -1,0 +1,27 @@
+<div class="container">
+
+
+
+    <div class="row" *ngIf="respuesta">
+        <div class="col-8">
+            <div class="card-columns">
+                <div class="card" *ngFor="let item of respuesta">
+                    <img [src]="item.thumbnail.path+'.jpg'" class="card-img-top" [alt]="item.title" />
+                    <div class="card-body">
+                        <h5 class="card-title">{{item.title}}</h5>
+                        <p class="card-text justify-content-center">
+                            {{item.description}}
+                        </p>
+                        <br>
+                        <button type="button" class="btn btn-primary btn-sm btn-block">Añadir al carrito</button>
+                        <br>
+                        <input type="text" value="Cantidad" placeholder="0" class="form-control input-sm">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4 ">
+            <button type="button" class="btn btn-primary float-right" (click)="buscar()">Terminar compra</button>
+        </div>
+    </div>
+</div>
