@@ -1,27 +1,54 @@
 <div class="container">
+    <div class="row">
+        <div class="col-9">
+            <div class="input-group">
+                <input type="text" aria-label="First name" class="form-control col-3" style="margin-right: 2%;" placeholder="Autor" />
+                <input type="text" aria-label="Last name" class="form-control col-3" style="margin-right: 2%;" placeholder="Nombre comic" />
+                <input type="text" aria-label="Last name" class="form-control col-3" style="margin-right: 2%;" placeholder="Fecha comic" />
+                <button type="button" class="btn btn-dark btn-sm">Filtrar</button>
+            </div>
+        </div>
+    </div>
+    <br /><br />
 
-
-
-    <div class="row" *ngIf="respuesta">
-        <div class="col-8">
-            <div class="card-columns">
-                <div class="card" *ngFor="let item of respuesta">
-                    <img [src]="item.thumbnail.path+'.jpg'" class="card-img-top" [alt]="item.title" />
-                    <div class="card-body">
-                        <h5 class="card-title">{{item.title}}</h5>
-                        <p class="card-text justify-content-center">
-                            {{item.description}}
-                        </p>
-                        <br>
-                        <button type="button" class="btn btn-primary btn-sm btn-block">Añadir al carrito</button>
-                        <br>
-                        <input type="text" value="Cantidad" placeholder="0" class="form-control input-sm">
+    <form autocomplete="off" [formGroup]="forma">
+        <div class="form-group row" *ngIf="respuesta">
+            <div class="col-9">
+                <div class="card-columns">
+                    <div class="card" *ngFor="let item of respuesta">
+                        <img [src]="item.thumbnail.path + '.jpg'" class="card-img-top" [alt]="item.title" />
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.title }}</h5>
+                            <h4></h4>
+                            <p class="card-text justify-content-center">
+                                {{ item.description }}
+                            </p>
+                            <br />
+                            <button type="button" class="btn btn-primary btn-sm btn-block" (click)="anadirAlCarrito(item.id)">
+                Añadir al carrito
+              </button>
+                            <br />
+                            <input class="form-control input-sm" value="" type="number" placeholder="Cantidad" formControlName="cantidad" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-3">
+                <div class="row">
+                    <div class="col">
+                        <button style="margin-right: 15px;" type="button " class="btn btn-primary" routerLink="/carritoCompra">
+              Ver carrito compra ({{ cantidadCarritoCompra }})
+            </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="button" class="btn btn-primary" (click)="limpiarFormulario()">
+              Limpiar seleccion
+            </button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-4 ">
-            <button type="button" class="btn btn-primary float-right" (click)="buscar()">Terminar compra</button>
-        </div>
-    </div>
+    </form>
 </div>
