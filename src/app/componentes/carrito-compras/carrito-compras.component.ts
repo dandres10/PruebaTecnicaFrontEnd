@@ -61,11 +61,11 @@ export class CarritoComprasComponent {
 
   cargarDataAlFormulario() {
     this.formaCarrito.reset({
-      nombre: 'pepe',
-      numeroDocumento: 123,
-      direccion: 'sdfsadf',
-      celular: '234234',
-      tipoDocumento: 1
+      nombre: '',
+      numeroDocumento: '',
+      direccion: '',
+      celular: '',
+      tipoDocumento: ''
 
     });
 
