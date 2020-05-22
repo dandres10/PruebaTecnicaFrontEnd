@@ -1,10 +1,13 @@
+
 import { Component } from '@angular/core';
 import { Comic } from '../../clases/comic/Comic';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ComicService } from '../../servicios/comic.service';
 import { Usuario } from '../../clases/usuario/Usuario';
-import { error } from 'protractor';
-import { IUsuario } from '../../clases/usuario/IUsuario';
+import { Router } from '@angular/router';
+import { IRespuesta } from '../../clases/Respuesta/IRespuesta';
+
+
 
 @Component({
   selector: 'app-carrito-compras',
@@ -16,17 +19,17 @@ export class CarritoComprasComponent {
   pedidoCarrito: Comic[] = [];
   total: number = 0;
   formaCarrito: FormGroup;
-  datosUsuarioServicio: any;
-  idUsuario: any;
-
-
+  datosUsuarioServicio: IRespuesta<Usuario>;
   usuario: Usuario;
 
-  constructor(private fb: FormBuilder, private _comicServicio: ComicService) {
+
+
+  constructor(private fb: FormBuilder, private _comicServicio: ComicService, private routerModule: Router) {
     this.getLocalStorange();
     this.totalPedido();
     this.crearFormulario();
     this.cargarDataAlFormulario();
+
 
   }
 
@@ -61,19 +64,20 @@ export class CarritoComprasComponent {
 
   cargarDataAlFormulario() {
     this.formaCarrito.reset({
-      nombre: '',
-      numeroDocumento: '',
-      direccion: '',
-      celular: '',
-      tipoDocumento: ''
+      nombre: 'pepeto',
+      numeroDocumento: 1342,
+      direccion: 'en la esquina a la derecha',
+      celular: 123654,
+      tipoDocumento: 2
 
     });
+
 
 
   }
 
   usuarioRegistrar() {
-
+    console.log(this.formaCarrito);
     this.usuario = {
       Celular: this.formaCarrito.get("celular").value,
       Direccion: this.formaCarrito.get("direccion").value,
@@ -82,28 +86,31 @@ export class CarritoComprasComponent {
       TipoDocumento: parseInt(this.formaCarrito.get("tipoDocumento").value != undefined ? this.formaCarrito.get("tipoDocumento").value : 1)
     }
 
-    console.log(this.usuario);
-    //this.obtenerDatosUsuario(this.usuario);
 
-    
+    this.obtenerDatosUsuario(this.usuario);
+
+
 
 
   }
 
 
-  obtenerDatosUsuario(usuario: Usuario) {
-    let data: IUsuario;
-    this._comicServicio.guardarUsuario(usuario)
-      .toPromise().then(resp =>  data = resp.Entidades[0])
+  public obtenerDatosUsuario(usuario: Usuario) {
+
+
+    this._comicServicio.guardarUsuario(usuario).toPromise()
+      .then((resp: IRespuesta<Usuario>) => {
+        this.datosUsuarioServicio = resp;
+
+        console.log("porfin", this.datosUsuarioServicio);
+        this.routerModule.navigateByUrl("/home");
+
+      })
       .catch(error => console.log(error));
 
-      console.log("hola",data.Id);
+
   }
 
-
-  enviarPedido(){
-    
-  }
 
 
 

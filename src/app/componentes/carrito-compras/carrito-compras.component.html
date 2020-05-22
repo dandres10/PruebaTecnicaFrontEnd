@@ -18,67 +18,43 @@
                     <tr>
                         <td></td>
                         <td>Total</td>
-                        <td>{{ total |currency}}</td>
+                        <td>{{ total | currency }}</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <br />
+    <br />
+    <br />
 
-    <div class="row justify-content-end">
-
-        <div class="col-3 ">
-            <div class="btn-group" role="group" aria-label="Third group">
-                <button type="button" class="btn btn-danger">Cancelar pedido</button>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#staticBackdrop">Comprar</button>
-            </div>
-        </div>
+    <div class="row">
+        <div class="col-5">
+            <form autocomplete="off" [formGroup]="formaCarrito">
+                <label>Nombre</label>
+                <input class="form-control" value="" type="text" placeholder="Ej: Carlos" formControlName="nombre" /><br />
+                <label>Numero documento</label>
+                <input class="form-control" value="" type="number" placeholder="Ej: 1233891978" formControlName="numeroDocumento" /><br />
+                <label>Direccion</label>
+                <input class="form-control" value="" type="text" placeholder="Ej: Carrera 111 b # 138 - 29" formControlName="direccion" /><br />
+                <label>Celular</label>
+                <input class="form-control" value="" type="number" placeholder="Ej: 3219902478" formControlName="celular" /><br />
+                <label>Tipo Documento</label>
+                <select class="form-control" formControlName="tipoDocumento">
+          <option value="1" selected>Cedula</option>
+          <option value="2">Tarjeta Identidad</option> </select
+        ><br /><br />
+        
+      </form>
     </div>
-
-
-
-    <div>
-        <!-- Button trigger modal -->
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="staticBackdrop" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="staticBackdropLabel">Comprar</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-                    </div>
-                    <div class="modal-body">
-                        <h6>Para finalizar la compra necesitamos tus datos.</h6>
-                        <hr>
-                        <form autocomplete="off" [formGroup]="formaCarrito">
-                            <label>Nombre</label>
-                            <input class="form-control" value="" type="text" placeholder="Ej: Carlos" formControlName="nombre" /><br>
-                            <label>Numero documento</label>
-                            <input class="form-control" value="" type="number" placeholder="Ej: 1233891978" formControlName="numeroDocumento" /><br>
-                            <label>Direccion</label>
-                            <input class="form-control" value="" type="text" placeholder="Ej: Carrera 111 b # 138 - 29" formControlName="direccion" /><br>
-                            <label>Celular</label>
-                            <input class="form-control" value="" type="number" placeholder="Ej: 3219902478" formControlName="celular" /><br>
-                            <label>Tipo Documento</label>
-                            <select class="form-control" formControlName="tipoDocumento">
-                                
-                                <option value="1" selected>Cedula</option>
-                                <option value="2" >Tarjeta Identidad</option>
-                                
-                              </select>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cargarDataAlFormulario()">Cerrar</button>
-                        <button type="button" class="btn btn-primary" (click)="usuarioRegistrar()">Comprar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="col-7">
+        <button
+        type="button"
+        class="btn btn-primary"
+        (click)="usuarioRegistrar()"
+      >
+        Comprar
+      </button>
     </div>
-
+  </div>
 </div>
