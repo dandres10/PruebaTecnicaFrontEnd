@@ -6,6 +6,7 @@ import { ComicService } from '../../servicios/comic.service';
 import { Usuario } from '../../clases/usuario/Usuario';
 import { Router } from '@angular/router';
 import { IRespuesta } from '../../clases/Respuesta/IRespuesta';
+import { Pedido } from '../../clases/pepido/Pedido';
 
 
 
@@ -21,6 +22,8 @@ export class CarritoComprasComponent {
   formaCarrito: FormGroup;
   datosUsuarioServicio: IRespuesta<Usuario>;
   usuario: Usuario;
+  pedidoGuardar: Pedido[] = [];
+  pedido: Pedido;
 
 
 
@@ -101,13 +104,39 @@ export class CarritoComprasComponent {
     this._comicServicio.guardarUsuario(usuario).toPromise()
       .then((resp: IRespuesta<Usuario>) => {
         this.datosUsuarioServicio = resp;
-
-        console.log("porfin", this.datosUsuarioServicio);
-        this.routerModule.navigateByUrl("/home");
-
+        this.guardarPedido();
+        //this.routerModule.navigateByUrl("/home");
       })
       .catch(error => console.log(error));
 
+
+
+
+  }
+
+
+  private guardarPedido() {
+
+
+
+    for (let i = 1; i < localStorage.length + 1; i++) {
+      let datos: Comic = JSON.parse(localStorage.getItem(i.toString()));
+
+      this.pedido = {
+        Cantidad: datos.Cantidad,
+        Comic: datos.Id,
+        Usuario: this.datosUsuarioServicio.Entidades[0].Id,
+        Valor: datos.Valor * datos.Cantidad
+
+      };
+
+      this.pedidoGuardar.push(this.pedido);
+
+    }
+
+    console.log("Pedido enviar", this.pedidoGuardar);
+
+    this._comicServicio.guardarPedido(this.pedidoGuardar).subscribe(resp => console.log(resp));
 
   }
 

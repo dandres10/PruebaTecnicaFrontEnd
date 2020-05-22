@@ -68,10 +68,9 @@ export class ComicService {
     return this.http.post<IRespuesta<Usuario>>(url, JSON.stringify(usuario), { headers: this.headerPublic });
   }
 
-   guardarPedido(pedido: Pedido): Observable<any> {
+   guardarPedido(pedido: Pedido[]): Observable<any> {
     let url: string = `api/Pedido/GuadarPedido`;
-    return this.http.post<any>(url, JSON.stringify(pedido), { headers: this.headerPublic })
-      .pipe(map((resp => resp.Entidades[0])));
+    return this.http.post(url, JSON.stringify(pedido), { headers: this.headerPublic });
   }
 
 
