@@ -8,6 +8,11 @@ import { Comic } from '../clases/comic/Comic';
 import { Usuario } from '../clases/usuario/Usuario';
 import { Pedido } from '../clases/pepido/Pedido';
 import { IRespuesta } from '../clases/Respuesta/IRespuesta';
+import { Compra } from '../clases/compra/Compra';
+import { ReporteCompraDetalle } from '../clases/compra/consultas/ReporteCompraDetalle';
+import { ReporteCompra } from '../clases/compra/consultas/ReporteCompra';
+import { RespuestaCompra } from '../clases/compra/consultas/RespuestaCompra';
+import { RespuestaCompraDetalle } from '../clases/compra/consultas/RespuestaCompraDetalle';
 
 
 @Injectable({
@@ -61,17 +66,40 @@ export class ComicService {
     return this.http.post(url, JSON.stringify(comic), { headers: this.headerPublic });
   }
 
-  public guardarUsuario(usuario: Usuario):Observable<any> {
-    
+  public guardarUsuario(usuario: Usuario): Observable<any> {
+
     let url: string = `api/Usuario/GuadarUsuario`;
 
     return this.http.post<IRespuesta<Usuario>>(url, JSON.stringify(usuario), { headers: this.headerPublic });
   }
 
-   guardarPedido(pedido: Pedido[]): Observable<any> {
+  guardarPedido(pedido: Pedido[]): Observable<any> {
     let url: string = `api/Pedido/GuadarPedido`;
-    return this.http.post(url, JSON.stringify(pedido), { headers: this.headerPublic });
+    return this.http.post<IRespuesta<Pedido>>(url, JSON.stringify(pedido), { headers: this.headerPublic });
   }
+
+  guardarCompra(compra: Compra): Observable<any> {
+    let url: string = `api/Compra/GuadarCompra`;
+    return this.http.post(url, JSON.stringify(compra), { headers: this.headerPublic });
+  }
+
+
+  reporteDetalle(reporteCompraDetalle: ReporteCompraDetalle) {
+    let url: string = `api/ReportesCompras/ReporteCompraDetalle`;
+    return this.http.post<IRespuesta<RespuestaCompraDetalle>>(url, JSON.stringify(reporteCompraDetalle), { headers: this.headerPublic });
+  }
+
+  reporteCompra(reporteCompra: ReporteCompra) {
+    let url: string = `api/ReportesCompras/ReporteCompra`;
+    return this.http.post<IRespuesta<RespuestaCompra>>(url, JSON.stringify(reporteCompra), { headers: this.headerPublic });
+  }
+
+
+  
+
+
+
+
 
 
 

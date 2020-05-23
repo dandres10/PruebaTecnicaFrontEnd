@@ -1,4 +1,14 @@
-<div class="container">
+<div *ngIf="total === 0" style="padding-left : 50px;">
+    <div class="row">
+        <div class="col">
+            <h1>No tienes ningun carrito.</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container" *ngIf="total != 0 ">
+    <h1>Carrito compra</h1>
+    <br><br>
     <div class="row">
         <div class="col">
             <table class="table table-striped">
@@ -6,6 +16,7 @@
                     <tr>
                         <th scope="col">Nombre comic</th>
                         <th scope="col">Cantidad</th>
+                        <th scope="col">Precio unidad</th>
                         <th scope="col">Precio</th>
                     </tr>
                 </thead>
@@ -14,11 +25,14 @@
                         <td>{{ comic.Nombre }}</td>
                         <td>{{ comic.Cantidad }}</td>
                         <td>{{ comic.Valor | currency }}</td>
+                        <td>{{ comic.Valor*comic.Cantidad | currency }}</td>
                     </tr>
                     <tr>
                         <td></td>
                         <td>Total</td>
+                        <td></td>
                         <td>{{ total | currency }}</td>
+
                     </tr>
                 </tbody>
             </table>
@@ -28,8 +42,10 @@
     <br />
     <br />
 
-    <div class="row">
+    <div class="row ">
+
         <div class="col-5">
+            <h4>Para finalizar la compra debe digilenciar estos datos.</h4><br><br>
             <form autocomplete="off" [formGroup]="formaCarrito">
                 <label>Nombre</label>
                 <input class="form-control" value="" type="text" placeholder="Ej: Carlos" formControlName="nombre" /><br />
@@ -47,14 +63,41 @@
         
       </form>
     </div>
-    <div class="col-7">
+    <div class="col-5" *ngIf="compraFilalizada" style="margin-left: 10%; padding-top: 20%;">
+
+        <div class="card">
+            <h5 class="card-header">Compra realizada.</h5>
+            <div class="card-body">
+              <h5 class="card-title">Datos de compra</h5>
+              <p><strong> Numero Documento: </strong> {{datosUsuarioServicio.Entidades[0].NumeroDocumento}}</p>
+                <p><strong>Codigo Pedido:  </strong>  {{datosPedidoServicio.Entidades[0].Guid }}</p>
+                <hr>
+                <p>Guarda estos datos en caso de reclamo.</p>
+              <a routerLink="/reporteCompra"  class="btn btn-primary">Ver reporte compra</a>
+            </div>
+          </div>
+        
+        
+        
+
+    </div>
+  </div>
+
+  <div class="row">
+      <div class="col">
         <button
         type="button"
+        
         class="btn btn-primary"
         (click)="usuarioRegistrar()"
+        [disabled]="compraFilalizada"
+        
       >
         Comprar
       </button>
-    </div>
-  </div>
+      </div>
+  </div><br>
+  <br>
+  <br>
+  <br>
 </div>

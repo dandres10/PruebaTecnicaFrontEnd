@@ -13,21 +13,55 @@ export class HomeComponent {
 
   precios: number[] = [12000, 23000, 10000, 15000, 8000, 7000, 6000, 5500, 7800, 9500, 12000, 23000, 10000, 15000, 8000, 7000, 6000, 5500, 7800, 9500];
   respuesta: any[] = [];
+  respuestaFiltro: any[] = [];
   carrito: Comic[] = [];
   comic = new Comic();
   cantidadCarritoCompra: number = 0;
   forma: FormGroup;
   contPrecios: number = 0;
+  busquedaActivo: boolean = false;
+  busqueda: any;
 
 
 
   constructor(private _comicServicio: ComicService, private fb: FormBuilder) {
     this.crearFormulario();
+    this.iniciarFormulario();
 
 
-    this._comicServicio.getComics().subscribe(resp => this.respuesta = resp);
+    this._comicServicio.getComics().subscribe(resp => { this.respuesta = resp; console.log(resp) });
 
 
+  }
+  
+  filtrar() {
+    this.respuestaFiltro = this.buscarFiltro(this.forma.get("nombre").value, this.respuesta);
+    console.log( this.respuestaFiltro);
+  }
+
+  buscarFiltro(termino: any, data: any): any {
+    this.busquedaActivo = true;
+    let respuesta: any = [];
+    termino = termino.toLowerCase();
+
+    for (let i = 0; i < data.length; i++) {
+
+      let comic = data[i].title.toLowerCase();
+      let dataComic = data[i];
+      if (comic.indexOf(termino) >= 0) {
+       
+        respuesta.push(dataComic);
+      }
+
+    }
+
+    return respuesta;
+
+  }
+
+  quitarFiltro() {
+    this.busquedaActivo = false;
+    this.limpiarFormulario();
   }
 
   anadirAlCarrito(id: number) {
@@ -45,10 +79,10 @@ export class HomeComponent {
     this.agregarListaCarritoNoDuplicado(id);
 
 
-    console.log(this.carrito);
+
 
     localStorage.setItem(`${this.cantidadCarritoCompra}`, JSON.stringify(this.comic));
-    
+
 
   }
 
@@ -58,15 +92,15 @@ export class HomeComponent {
     if (!this.carrito.find(resp => resp.Id === id)) {
 
       this.carrito.push(this.comic);
-      //this.guardarComicApi(this.comic);
+      this.guardarComicApi(this.comic);
       this.cantidadCarritoCompra++;
 
     }
-    
+
   }
 
   guardarComicApi(comic: Comic) {
-    this._comicServicio.guardarComic(comic).toPromise().then(resp => console.log(resp)).catch(error => console.log(error));
+    this._comicServicio.guardarComic(comic).subscribe();
   }
 
   buscar(id: number): any {
@@ -75,7 +109,9 @@ export class HomeComponent {
 
   crearFormulario() {
     this.forma = this.fb.group({
-      cantidad: ['']
+      cantidad: [''],
+      autor: [''],
+      nombre: ['']
     });
   }
 
@@ -90,6 +126,18 @@ export class HomeComponent {
 
   limpiarFormulario() {
     this.forma.reset({
+      cantidad: 1,
+      autor: '',
+      nombre: ''
+
+    });
+
+    localStorage.clear();
+  }
+
+
+  iniciarFormulario() {
+    this.forma.reset({
       cantidad: 1
 
     });
@@ -97,7 +145,10 @@ export class HomeComponent {
     localStorage.clear();
   }
 
- 
+
+
+
+
 
 
 

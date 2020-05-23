@@ -1,0 +1,70 @@
+<div *ngIf="estado === 0" style="padding-left : 50px;">
+    <div class="row">
+        <div class="col">
+            <h1>No tienes ningun pedido realizado.</h1>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding-left : 50px;" *ngIf="estado > 0">
+
+    <div class="row">
+        <h1>Reporte compra</h1>
+        <hr>
+
+
+
+    </div> <br><br>
+
+
+    <div class="row " *ngIf="cargaDatos">
+        <div class="col-12 ">
+            <div class="row">
+                <div class="col-10">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre comic</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio unidad</th>
+                                <th scope="col">Precio </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let compra of mostrarCompraDetalles">
+                                <td>{{ compra.NombreComic }}</td>
+                                <td>{{ compra.CantidadComic }}</td>
+                                <td>{{ compra.ValorComic/compra.CantidadComic | currency }}</td>
+                                <td>{{ compra.ValorComic | currency }}</td>
+
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div><br>
+    <br>
+    <br>
+
+    <div class="row" *ngIf="cargaDatos">
+        <div class="col">
+            <h2>Datos comprador</h2>
+            <hr>
+            <p><strong>Orden</strong> {{mostrarCompra[0].Orden}} </p>
+            <p><strong>Comprador</strong> {{mostrarCompra[0].Comprador}} </p>
+            <p><strong>Numero documento</strong> {{mostrarCompra[0].NumeroDocumento}} </p>
+            <p><strong>Direccion</strong> {{mostrarCompra[0].Direccion}} </p>
+            <p><strong>Celular</strong> {{mostrarCompra[0].Celular}} </p>
+            <p><strong>Fecha compra</strong> {{mostrarCompra[0].FechaCompra | date}} </p>
+            <p><strong>Cantidad </strong> {{mostrarCompra[0].CantidadComic}} </p>
+            <p><strong>Total compra</strong> {{mostrarCompra[0].TotalCompra|currency}} </p>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>

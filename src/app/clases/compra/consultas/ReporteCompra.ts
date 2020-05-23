@@ -1,4 +1,4 @@
-export class ReporteCompra {
+export interface ReporteCompra {
     NumeroDocumento: number;
     GuidPedido: string;
 }

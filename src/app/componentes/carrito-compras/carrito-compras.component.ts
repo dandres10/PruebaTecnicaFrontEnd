@@ -1,12 +1,14 @@
 
 import { Component } from '@angular/core';
 import { Comic } from '../../clases/comic/Comic';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { ComicService } from '../../servicios/comic.service';
 import { Usuario } from '../../clases/usuario/Usuario';
 import { Router } from '@angular/router';
 import { IRespuesta } from '../../clases/Respuesta/IRespuesta';
 import { Pedido } from '../../clases/pepido/Pedido';
+import { Compra } from '../../clases/compra/Compra';
+
 
 
 
@@ -21,9 +23,12 @@ export class CarritoComprasComponent {
   total: number = 0;
   formaCarrito: FormGroup;
   datosUsuarioServicio: IRespuesta<Usuario>;
+  datosPedidoServicio: IRespuesta<Pedido>;
   usuario: Usuario;
   pedidoGuardar: Pedido[] = [];
   pedido: Pedido;
+  compra: Compra;
+  compraFilalizada: boolean = false;
 
 
 
@@ -31,7 +36,7 @@ export class CarritoComprasComponent {
     this.getLocalStorange();
     this.totalPedido();
     this.crearFormulario();
-    this.cargarDataAlFormulario();
+    //this.cargarDataAlFormulario();
 
 
   }
@@ -42,14 +47,16 @@ export class CarritoComprasComponent {
 
     }
 
-    console.log(this.pedidoCarrito);
+  
   }
 
 
   totalPedido(): number {
     this.pedidoCarrito.forEach(element => {
-      this.total += element.Valor;
+      this.total += element.Valor * element.Cantidad;
     });
+
+
 
     return this.total;
   }
@@ -68,7 +75,7 @@ export class CarritoComprasComponent {
   cargarDataAlFormulario() {
     this.formaCarrito.reset({
       nombre: 'pepeto',
-      numeroDocumento: 1342,
+      numeroDocumento: Math.floor(Math.random() * (1000 - 1)) + 1,
       direccion: 'en la esquina a la derecha',
       celular: 123654,
       tipoDocumento: 2
@@ -104,8 +111,9 @@ export class CarritoComprasComponent {
     this._comicServicio.guardarUsuario(usuario).toPromise()
       .then((resp: IRespuesta<Usuario>) => {
         this.datosUsuarioServicio = resp;
-        this.guardarPedido();
-        //this.routerModule.navigateByUrl("/home");
+
+        this.guardarPedido(this.datosUsuarioServicio);
+
       })
       .catch(error => console.log(error));
 
@@ -115,7 +123,11 @@ export class CarritoComprasComponent {
   }
 
 
-  private guardarPedido() {
+
+
+
+
+  private guardarPedido(usuario: IRespuesta<Usuario>) {
 
 
 
@@ -125,7 +137,7 @@ export class CarritoComprasComponent {
       this.pedido = {
         Cantidad: datos.Cantidad,
         Comic: datos.Id,
-        Usuario: this.datosUsuarioServicio.Entidades[0].Id,
+        Usuario: usuario.Entidades[0].Id,
         Valor: datos.Valor * datos.Cantidad
 
       };
@@ -134,10 +146,59 @@ export class CarritoComprasComponent {
 
     }
 
-    console.log("Pedido enviar", this.pedidoGuardar);
 
-    this._comicServicio.guardarPedido(this.pedidoGuardar).subscribe(resp => console.log(resp));
 
+    this._comicServicio.guardarPedido(this.pedidoGuardar)
+      .toPromise()
+      .then((resp: IRespuesta<Pedido>) => {
+        this.datosPedidoServicio = resp;
+
+        this.guardarCompra(this.datosPedidoServicio);
+       
+      })
+      .catch(error => error);
+
+
+
+  }
+
+
+  private guardarCompra(pedido: IRespuesta<Pedido>) {
+
+    this.compra = {
+      Fecha: this.fecha(),
+      Pedido: pedido.Entidades[0].Guid,
+      Total: this.total
+    }
+
+    console.log();
+
+    this._comicServicio.guardarCompra(this.compra)
+      .toPromise()
+      .then(() => {
+        if (this.datosUsuarioServicio.Entidades[0].NumeroDocumento && this.datosPedidoServicio.Entidades[0].Guid) {
+          this.compraFilalizada = true;
+              localStorage.setItem("numeroDocumento",this.datosUsuarioServicio.Entidades[0].NumeroDocumento.toString())
+              localStorage.setItem("orden",this.datosPedidoServicio.Entidades[0].Guid)
+        }
+
+        //this.routerModule.navigateByUrl("/home");
+
+      })
+      .catch();
+
+  }
+
+  private fecha(): string {
+    let date = new Date()
+
+    let day: number = date.getDate()
+    let month = date.getMonth() + 1
+    let year = date.getFullYear();
+
+    let formatoMonth = month < 10 ? `0${month}` : month;
+
+    return `${year}-${formatoMonth}-${day}`;
   }
 
 
