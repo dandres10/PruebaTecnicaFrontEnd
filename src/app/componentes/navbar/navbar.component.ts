@@ -9,8 +9,7 @@ import { ComicService } from '../../servicios/comic.service';
 export class NavbarComponent implements OnInit {
 
   constructor(private _comicService: ComicService) {
-    //this._comicService.getComics().subscribe(resp => console.log("Listacomics",resp));
-    //this._comicService.getCreadoresComic(384).subscribe(resp => console.log("Creadores comic",resp));
+    
   }
 
   ngOnInit(): void {

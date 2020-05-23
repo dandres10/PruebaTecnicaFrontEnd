@@ -29,14 +29,14 @@ export class HomeComponent {
     this.iniciarFormulario();
 
 
-    this._comicServicio.getComics().subscribe(resp => { this.respuesta = resp; console.log(resp) });
+    this._comicServicio.getComics().subscribe(resp => this.respuesta = resp);
 
 
   }
   
   filtrar() {
     this.respuestaFiltro = this.buscarFiltro(this.forma.get("nombre").value, this.respuesta);
-    console.log( this.respuestaFiltro);
+   
   }
 
   buscarFiltro(termino: any, data: any): any {
